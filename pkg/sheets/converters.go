@@ -53,17 +53,27 @@ func ParseNameFromEmail(email string) (string, error) {
 		return "", fmt.Errorf("invalid name format in email")
 	}
 
+	// Function to filter out numbers and special characters
+	filter := func(r rune) rune {
+		if unicode.IsLetter(r) || r == '-' || r == '\'' {
+			return r
+		}
+		return -1
+	}
+
 	// Capitalize the first letter of each name part and join them with a space
 	var nameBuilder strings.Builder
 	for i, part := range nameParts {
-		if len(part) == 0 {
+		// Remove numbers and special characters
+		cleanedPart := strings.Map(filter, part)
+		if len(cleanedPart) == 0 {
 			continue
 		}
 		if i > 0 {
 			nameBuilder.WriteRune(' ')
 		}
 		// Capitalize the first letter and make the rest lowercase
-		for j, r := range part {
+		for j, r := range cleanedPart {
 			if j == 0 {
 				nameBuilder.WriteRune(unicode.ToUpper(r))
 			} else {
