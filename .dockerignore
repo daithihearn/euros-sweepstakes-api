@@ -1,0 +1,6 @@
+Makefile*
+.env
+
+.idea/
+build/
+keys/
