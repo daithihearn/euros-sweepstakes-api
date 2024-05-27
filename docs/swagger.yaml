@@ -36,6 +36,23 @@ info:
   title: Euros Sweepstakes API
   version: 0.1.0
 paths:
+  /result:
+    get:
+      description: Get result
+      operationId: get-result
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/result.Result'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      tags:
+      - result
   /scores:
     get:
       description: Get all scores
