@@ -29,6 +29,8 @@ definitions:
     properties:
       country:
         type: string
+      odds:
+        type: string
     type: object
 info:
   contact: {}

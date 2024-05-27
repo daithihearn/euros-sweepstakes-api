@@ -116,6 +116,9 @@ const docTemplate = `{
             "properties": {
                 "country": {
                     "type": "string"
+                },
+                "odds": {
+                    "type": "string"
                 }
             }
         }

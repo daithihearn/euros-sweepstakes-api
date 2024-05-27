@@ -109,6 +109,9 @@
             "properties": {
                 "country": {
                     "type": "string"
+                },
+                "odds": {
+                    "type": "string"
                 }
             }
         }

@@ -37,19 +37,19 @@ func (s *Sync) RefreshScores() error {
 		}
 		name := fmt.Sprintf("%v", row[5])
 
-		winner, err := team.ParseTeamFromString(fmt.Sprintf("%v", row[1]))
+		winner, err := team.ParseTeam(fmt.Sprintf("%v", row[1]), "")
 		if err != nil {
 			return fmt.Errorf("failed to parse winner: %s %w", row[1], err)
 		}
-		runnerUp, err := team.ParseTeamFromString(fmt.Sprintf("%v", row[2]))
+		runnerUp, err := team.ParseTeam(fmt.Sprintf("%v", row[2]), "")
 		if err != nil {
 			return fmt.Errorf("failed to parse runner up: %s %w", row[2], err)
 		}
-		thirdPlace, err := team.ParseTeamFromString(fmt.Sprintf("%v", row[3]))
+		thirdPlace, err := team.ParseTeam(fmt.Sprintf("%v", row[3]), "")
 		if err != nil {
 			return fmt.Errorf("failed to parse third place: %s %w", row[3], err)
 		}
-		fourthPlace, err := team.ParseTeamFromString(fmt.Sprintf("%v", row[4]))
+		fourthPlace, err := team.ParseTeam(fmt.Sprintf("%v", row[4]), "")
 		if err != nil {
 			return fmt.Errorf("failed to parse fourth place: %s %w", row[4], err)
 		}
