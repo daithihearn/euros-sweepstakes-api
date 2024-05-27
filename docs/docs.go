@@ -54,34 +54,42 @@ const docTemplate = `{
                 }
             }
         },
+        "result.Result": {
+            "type": "object",
+            "properties": {
+                "fourthPlace": {
+                    "$ref": "#/definitions/team.Team"
+                },
+                "runnerUp": {
+                    "$ref": "#/definitions/team.Team"
+                },
+                "thirdPlace": {
+                    "$ref": "#/definitions/team.Team"
+                },
+                "winner": {
+                    "$ref": "#/definitions/team.Team"
+                }
+            }
+        },
         "score.Score": {
             "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
                 },
-                "teams": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/score.Team"
-                    }
+                "result": {
+                    "$ref": "#/definitions/result.Result"
                 },
                 "totalScore": {
                     "type": "integer"
                 }
             }
         },
-        "score.Team": {
+        "team.Team": {
             "type": "object",
             "properties": {
                 "country": {
                     "type": "string"
-                },
-                "flag": {
-                    "type": "string"
-                },
-                "score": {
-                    "type": "integer"
                 }
             }
         }

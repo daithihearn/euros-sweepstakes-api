@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"euros-sweepstakes-api/pkg/cache"
+	"euros-sweepstakes-api/pkg/result"
 	"euros-sweepstakes-api/pkg/score"
 	"euros-sweepstakes-api/pkg/sheets"
 	"euros-sweepstakes-api/pkg/sync"
@@ -48,17 +49,18 @@ func main() {
 		DB:       0, // use default DB
 	})
 
-	scoreCache := cache.NewRedisCache[[]score.Score](rdb, ctx)
-	scoreService := score.Service{Cache: scoreCache}
-
 	sheetService, err := sheets.NewSheetService(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create sheet service: %v", err)
 	}
 
-	// TODO: Need an Odds service
+	resultCache := cache.NewRedisCache[result.Result](rdb, ctx)
+	resultService := result.Service{Cache: resultCache, SheetService: sheetService}
 
-	syncService := sync.Syncer{ScoreService: &scoreService, SheetService: sheetService}
+	scoreCache := cache.NewRedisCache[[]score.Score](rdb, ctx)
+	scoreService := score.Service{Cache: scoreCache, ResultService: &resultService, SheetService: sheetService}
+
+	syncService := sync.Syncer{ScoreService: &scoreService, ResultService: &resultService}
 
 	// Sync with the API.
 	err = syncService.Sync()

@@ -9,9 +9,8 @@ import (
 )
 
 type SheetService struct {
-	srv           *sheets.Service
-	spreadsheetID string
-	readRange     string
+	Srv           *sheets.Service
+	SpreadsheetID string
 }
 
 func NewSheetService(ctx context.Context) (*SheetService, error) {
@@ -35,38 +34,7 @@ func NewSheetService(ctx context.Context) (*SheetService, error) {
 	}
 
 	return &SheetService{
-		srv:           srv,
-		spreadsheetID: spreadsheetID,
-		readRange:     "Form Responses 3!A:F",
+		Srv:           srv,
+		SpreadsheetID: spreadsheetID,
 	}, nil
-}
-
-// GetEntries retrieves the data from the Google Sheet and returns a slice of Entry structs
-func (s *SheetService) GetEntries() ([]Entry, error) {
-	resp, err := s.srv.Spreadsheets.Values.Get(s.spreadsheetID, s.readRange).Do()
-	if err != nil {
-		return nil, fmt.Errorf("unable to retrieve data from sheet: %v", err)
-	}
-
-	var entries []Entry
-	for i, row := range resp.Values {
-		if i == 0 {
-			// Skip the header row
-			continue
-		}
-		if len(row) < 6 {
-			continue // Skip rows that do not have all columns
-		}
-		entry := Entry{
-			Timestamp:    fmt.Sprintf("%v", row[0]),
-			EmailAddress: fmt.Sprintf("%v", row[1]),
-			Winner:       fmt.Sprintf("%v", row[2]),
-			SecondPlace:  fmt.Sprintf("%v", row[3]),
-			ThirdPlace:   fmt.Sprintf("%v", row[4]),
-			FourthPlace:  fmt.Sprintf("%v", row[5]),
-		}
-		entries = append(entries, entry)
-	}
-
-	return entries, nil
 }
