@@ -8,7 +8,9 @@ import (
 	"context"
 	_ "euros-sweepstakes-api/docs"
 	"euros-sweepstakes-api/pkg/cache"
+	"euros-sweepstakes-api/pkg/result"
 	"euros-sweepstakes-api/pkg/score"
+	"euros-sweepstakes-api/pkg/sheets"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -57,8 +59,16 @@ func main() {
 		DB:       0, // use default DB
 	})
 
+	sheetService, err := sheets.NewSheetService(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create sheet service: %v", err)
+	}
+
+	resultCache := cache.NewRedisCache[result.Result](rdb, ctx)
+	resultService := result.Service{Cache: resultCache, SheetService: sheetService}
+
 	scoreCache := cache.NewRedisCache[[]score.Score](rdb, ctx)
-	scoreService := score.Service{Cache: scoreCache}
+	scoreService := score.Service{Cache: scoreCache, ResultService: &resultService, SheetService: sheetService}
 	scoreHandler := score.Handler{S: &scoreService}
 
 	// Set up the API routes.
