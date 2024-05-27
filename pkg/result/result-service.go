@@ -1,10 +1,12 @@
 package result
 
 import (
+	"encoding/json"
 	"euros-sweepstakes-api/pkg/cache"
 	"euros-sweepstakes-api/pkg/sheets"
 	"euros-sweepstakes-api/pkg/team"
 	"fmt"
+	"log"
 )
 
 type ServiceI interface {
@@ -69,6 +71,15 @@ func (s *Service) RefreshResults() error {
 		ThirdPlace:  thirdPlace,
 		FourthPlace: fourthPlace,
 	}
+
+	// Marshal the struct to JSON
+	jsonData, err := json.Marshal(result)
+	if err != nil {
+		log.Fatalf("Error marshaling struct to JSON: %v", err)
+	}
+
+	// Log the JSON string
+	log.Println(string(jsonData))
 
 	err = s.Cache.Set("results", result, 0)
 	if err != nil {
