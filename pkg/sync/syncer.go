@@ -25,5 +25,6 @@ func (s *Syncer) Sync() error {
 		return err
 	}
 
+	log.Println("Sync complete")
 	return nil
 }

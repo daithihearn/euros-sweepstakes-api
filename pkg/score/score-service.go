@@ -80,6 +80,9 @@ func (s *Service) RefreshScores() error {
 		scores = append(scores, score)
 	}
 
+	// Log the number of scores that were found
+	fmt.Printf("Refreshing %d scores\n", len(scores))
+
 	err = s.Cache.Set("scores", scores, 0)
 	if err != nil {
 		return fmt.Errorf("failed to set scores in cache: %w", err)
