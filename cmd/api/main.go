@@ -10,7 +10,6 @@ import (
 	"euros-sweepstakes-api/pkg/cache"
 	"euros-sweepstakes-api/pkg/result"
 	"euros-sweepstakes-api/pkg/score"
-	"euros-sweepstakes-api/pkg/sheets"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -59,16 +58,12 @@ func main() {
 		DB:       0, // use default DB
 	})
 
-	sheetService, err := sheets.NewSheetService(ctx)
-	if err != nil {
-		log.Fatalf("Failed to create sheet service: %v", err)
-	}
-
 	resultCache := cache.NewRedisCache[result.Result](rdb, ctx)
-	resultService := result.Service{Cache: resultCache, SheetService: sheetService}
+	resultService := result.Service{Cache: resultCache}
+	resultHandler := result.Handler{S: &resultService}
 
 	scoreCache := cache.NewRedisCache[[]score.Score](rdb, ctx)
-	scoreService := score.Service{Cache: scoreCache, ResultService: &resultService, SheetService: sheetService}
+	scoreService := score.Service{Cache: scoreCache, ResultService: &resultService}
 	scoreHandler := score.Handler{S: &scoreService}
 
 	// Set up the API routes.
@@ -98,6 +93,7 @@ func main() {
 
 	// Configure the routes
 	router.GET("/api/v1/scores", scoreHandler.Get)
+	router.GET("/api/v1/result", resultHandler.Get)
 
 	// Use the generated docs in the docs package.
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/swagger/doc.json")))

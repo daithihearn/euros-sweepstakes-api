@@ -7,20 +7,20 @@ import (
 )
 
 type Syncer struct {
-	ScoreService  *score.Service
-	ResultService *result.Service
+	ScoreSync  *score.Sync
+	ResultSync *result.Sync
 }
 
 func (s *Syncer) Sync() error {
 	log.Println("Starting to sync...")
 
 	// Refresh the scores
-	err := s.ScoreService.RefreshScores()
+	err := s.ScoreSync.RefreshScores()
 	if err != nil {
 		return err
 	}
 	// Refresh the scores
-	err = s.ResultService.RefreshResults()
+	err = s.ResultSync.RefreshResults()
 	if err != nil {
 		return err
 	}

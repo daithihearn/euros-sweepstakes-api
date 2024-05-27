@@ -55,12 +55,14 @@ func main() {
 	}
 
 	resultCache := cache.NewRedisCache[result.Result](rdb, ctx)
-	resultService := result.Service{Cache: resultCache, SheetService: sheetService}
+	resultService := result.Service{Cache: resultCache}
+	resultSync := result.Sync{ResultService: &resultService, SheetService: sheetService}
 
 	scoreCache := cache.NewRedisCache[[]score.Score](rdb, ctx)
-	scoreService := score.Service{Cache: scoreCache, ResultService: &resultService, SheetService: sheetService}
+	scoreService := score.Service{Cache: scoreCache, ResultService: &resultService}
+	scoreSync := score.Sync{ScoreService: &scoreService, ResultService: &resultService, SheetService: sheetService}
 
-	syncService := sync.Syncer{ScoreService: &scoreService, ResultService: &resultService}
+	syncService := sync.Syncer{ScoreSync: &scoreSync, ResultSync: &resultSync}
 
 	// Sync with the API.
 	err = syncService.Sync()

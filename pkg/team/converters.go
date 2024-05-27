@@ -5,18 +5,19 @@ import (
 	"strings"
 )
 
-// ParseTeamFromString the team object from the country string
+// ParseTeam the team object from the country string
 // the format of the string is "Spain"
-func ParseTeamFromString(input string) (Team, error) {
-	input = strings.TrimSpace(input)
+func ParseTeam(country string, odds string) (Team, error) {
+	country = strings.TrimSpace(country)
 
-	err := validateCountry(input)
+	err := validateCountry(country)
 	if err != nil {
 		return Team{}, err
 	}
 
 	return Team{
-		Country: input,
+		Country: country,
+		Odds:    odds,
 	}, nil
 }
 

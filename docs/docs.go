@@ -15,6 +15,32 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/result": {
+            "get": {
+                "description": "Get result",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "result"
+                ],
+                "operationId": "get-result",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/result.Result"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/scores": {
             "get": {
                 "description": "Get all scores",
@@ -89,6 +115,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "country": {
+                    "type": "string"
+                },
+                "odds": {
                     "type": "string"
                 }
             }
