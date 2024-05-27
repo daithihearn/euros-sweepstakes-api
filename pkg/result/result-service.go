@@ -1,12 +1,10 @@
 package result
 
 import (
-	"encoding/json"
 	"euros-sweepstakes-api/pkg/cache"
 	"euros-sweepstakes-api/pkg/sheets"
 	"euros-sweepstakes-api/pkg/team"
 	"fmt"
-	"log"
 )
 
 type ServiceI interface {
@@ -48,21 +46,21 @@ func (s *Service) RefreshResults() error {
 		return fmt.Errorf("invalid data found in the sheet")
 	}
 
-	winner, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[0]))
+	winner, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[0][0]))
 	if err != nil {
-		return fmt.Errorf("failed to parse winner: %s %w", val[0], err)
+		return fmt.Errorf("failed to parse winner: %s %w", val[0][0], err)
 	}
-	runnerUp, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[1]))
+	runnerUp, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[1][0]))
 	if err != nil {
-		return fmt.Errorf("failed to parse runner up: %s %w", val[1], err)
+		return fmt.Errorf("failed to parse runner up: %s %w", val[1][0], err)
 	}
-	thirdPlace, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[2]))
+	thirdPlace, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[2][0]))
 	if err != nil {
-		return fmt.Errorf("failed to parse third place: %s %w", val[2], err)
+		return fmt.Errorf("failed to parse third place: %s %w", val[2][0], err)
 	}
-	fourthPlace, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[3]))
+	fourthPlace, err := team.ParseTeamFromString(fmt.Sprintf("%v", val[3][0]))
 	if err != nil {
-		return fmt.Errorf("failed to parse fourth place: %s %w", val[3], err)
+		return fmt.Errorf("failed to parse fourth place: %s %w", val[3][0], err)
 	}
 
 	result := Result{
@@ -71,15 +69,6 @@ func (s *Service) RefreshResults() error {
 		ThirdPlace:  thirdPlace,
 		FourthPlace: fourthPlace,
 	}
-
-	// Marshal the struct to JSON
-	jsonData, err := json.Marshal(result)
-	if err != nil {
-		log.Fatalf("Error marshaling struct to JSON: %v", err)
-	}
-
-	// Log the JSON string
-	log.Println(string(jsonData))
 
 	err = s.Cache.Set("results", result, 0)
 	if err != nil {

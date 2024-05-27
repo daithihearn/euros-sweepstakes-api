@@ -74,9 +74,10 @@ func (s *Service) RefreshScores() error {
 
 		score := Score{
 			Name:       name,
-			Result:     result.Result{Winner: winner, RunnerUp: runnerUp, ThirdPlace: thirdPlace, FourthPlace: fourthPlace},
+			Result:     r,
 			TotalScore: totalScore,
 		}
+
 		scores = append(scores, score)
 	}
 
