@@ -15,13 +15,13 @@ func (s *Syncer) Sync() error {
 	log.Println("Starting to sync...")
 
 	// Refresh the results
-	err = s.ResultSync.RefreshResults()
+	err := s.ResultSync.RefreshResults()
 	if err != nil {
 		return err
 	}
 
 	// Refresh the scores
-	err := s.ScoreSync.RefreshScores()
+	err = s.ScoreSync.RefreshScores()
 	if err != nil {
 		return err
 	}
