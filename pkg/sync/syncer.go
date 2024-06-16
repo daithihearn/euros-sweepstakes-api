@@ -14,13 +14,14 @@ type Syncer struct {
 func (s *Syncer) Sync() error {
 	log.Println("Starting to sync...")
 
-	// Refresh the scores
-	err := s.ScoreSync.RefreshScores()
+	// Refresh the results
+	err = s.ResultSync.RefreshResults()
 	if err != nil {
 		return err
 	}
+
 	// Refresh the scores
-	err = s.ResultSync.RefreshResults()
+	err := s.ScoreSync.RefreshScores()
 	if err != nil {
 		return err
 	}
