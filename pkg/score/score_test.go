@@ -14,7 +14,7 @@ func TestCalculateTotalScore(t *testing.T) {
 		want     int
 	}{
 		{
-			name: "Max points",
+			name: "Max points - all correct order",
 
 			proposed: result.Result{
 				Winner:      team.Team{Country: "Italy"},
@@ -28,16 +28,50 @@ func TestCalculateTotalScore(t *testing.T) {
 				ThirdPlace:  team.Team{Country: "France"},
 				FourthPlace: team.Team{Country: "Germany"},
 			},
-			want: 32,
+			want: 26,
 		},
 		{
-			name: "Some points",
+			name: "Max points - 3rd and 4th wrong",
 
 			proposed: result.Result{
-				Winner:      team.Team{Country: "England"},
-				RunnerUp:    team.Team{Country: "Germany"},
+				Winner:      team.Team{Country: "Italy"},
+				RunnerUp:    team.Team{Country: "England"},
 				ThirdPlace:  team.Team{Country: "France"},
-				FourthPlace: team.Team{Country: "Italy"},
+				FourthPlace: team.Team{Country: "Germany"},
+			},
+			actual: result.Result{
+				Winner:      team.Team{Country: "Italy"},
+				RunnerUp:    team.Team{Country: "England"},
+				ThirdPlace:  team.Team{Country: "Germany"},
+				FourthPlace: team.Team{Country: "France"},
+			},
+			want: 26,
+		},
+		{
+			name: "3rd and 4th correct",
+
+			proposed: result.Result{
+				Winner:      team.Team{Country: "Portugal"},
+				RunnerUp:    team.Team{Country: "Germany"},
+				ThirdPlace:  team.Team{Country: "Italy"},
+				FourthPlace: team.Team{Country: "Spain"},
+			},
+			actual: result.Result{
+				Winner:      team.Team{Country: "England"},
+				RunnerUp:    team.Team{Country: "France"},
+				ThirdPlace:  team.Team{Country: "Italy"},
+				FourthPlace: team.Team{Country: "Spain"},
+			},
+			want: 10,
+		},
+		{
+			name: "3rd and 4th wrong position",
+
+			proposed: result.Result{
+				Winner:      team.Team{Country: "Portugal"},
+				RunnerUp:    team.Team{Country: "Germany"},
+				ThirdPlace:  team.Team{Country: "Italy"},
+				FourthPlace: team.Team{Country: "Spain"},
 			},
 			actual: result.Result{
 				Winner:      team.Team{Country: "England"},
@@ -45,7 +79,75 @@ func TestCalculateTotalScore(t *testing.T) {
 				ThirdPlace:  team.Team{Country: "Spain"},
 				FourthPlace: team.Team{Country: "Italy"},
 			},
-			want: 21,
+			want: 10,
+		},
+		{
+			name: "First place correct",
+
+			proposed: result.Result{
+				Winner:      team.Team{Country: "Portugal"},
+				RunnerUp:    team.Team{Country: "Italy"},
+				ThirdPlace:  team.Team{Country: "Germany"},
+				FourthPlace: team.Team{Country: "England"},
+			},
+			actual: result.Result{
+				Winner:      team.Team{Country: "Portugal"},
+				RunnerUp:    team.Team{Country: "France"},
+				ThirdPlace:  team.Team{Country: "Spain"},
+				FourthPlace: team.Team{Country: "Netherlands"},
+			},
+			want: 8,
+		},
+		{
+			name: "Second place correct",
+
+			proposed: result.Result{
+				Winner:      team.Team{Country: "Italy"},
+				RunnerUp:    team.Team{Country: "France"},
+				ThirdPlace:  team.Team{Country: "Germany"},
+				FourthPlace: team.Team{Country: "England"},
+			},
+			actual: result.Result{
+				Winner:      team.Team{Country: "Portugal"},
+				RunnerUp:    team.Team{Country: "France"},
+				ThirdPlace:  team.Team{Country: "Spain"},
+				FourthPlace: team.Team{Country: "Netherlands"},
+			},
+			want: 8,
+		},
+		{
+			name: "Third place correct",
+
+			proposed: result.Result{
+				Winner:      team.Team{Country: "Italy"},
+				RunnerUp:    team.Team{Country: "France"},
+				ThirdPlace:  team.Team{Country: "Germany"},
+				FourthPlace: team.Team{Country: "England"},
+			},
+			actual: result.Result{
+				Winner:      team.Team{Country: "Portugal"},
+				RunnerUp:    team.Team{Country: "Spain"},
+				ThirdPlace:  team.Team{Country: "Germany"},
+				FourthPlace: team.Team{Country: "Netherlands"},
+			},
+			want: 5,
+		},
+		{
+			name: "Fourth place correct",
+
+			proposed: result.Result{
+				Winner:      team.Team{Country: "Italy"},
+				RunnerUp:    team.Team{Country: "France"},
+				ThirdPlace:  team.Team{Country: "England"},
+				FourthPlace: team.Team{Country: "Germany"},
+			},
+			actual: result.Result{
+				Winner:      team.Team{Country: "Portugal"},
+				RunnerUp:    team.Team{Country: "Spain"},
+				ThirdPlace:  team.Team{Country: "Netherlands"},
+				FourthPlace: team.Team{Country: "Germany"},
+			},
+			want: 5,
 		},
 		{
 			name: "No points",

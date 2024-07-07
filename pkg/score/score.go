@@ -22,12 +22,6 @@ func calculateTotalScore(proposed result.Result, actual result.Result) int {
 	if proposed.RunnerUp.Country == actual.RunnerUp.Country {
 		res += 3
 	}
-	if proposed.ThirdPlace.Country == actual.ThirdPlace.Country {
-		res += 3
-	}
-	if proposed.FourthPlace.Country == actual.FourthPlace.Country {
-		res += 3
-	}
 
 	for _, t := range []team.Team{proposed.Winner, proposed.RunnerUp, proposed.ThirdPlace, proposed.FourthPlace} {
 		if t.Country == actual.Winner.Country || t.Country == actual.RunnerUp.Country || t.Country == actual.ThirdPlace.Country || t.Country == actual.FourthPlace.Country {
